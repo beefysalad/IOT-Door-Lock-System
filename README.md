@@ -1,5 +1,6 @@
-# IOT-Door-Lock-System
-## Project requirement for the subject CPE461 - Embedded Systems 
+# IOT Door Lock System
+Subject requirement for the subject CPE461 - Embedded Systems. 
+### Members
 - [John Patrick Ryan Mandal](https://github.com/beefysalad)
 - [Paolo Taboso](https://github.com/tabsgage)
 
@@ -22,3 +23,4 @@
 - [x] Real Time Push Notifications (Webhooks)
 - [x] Internet of Things
 
+![alt text](https://res.cloudinary.com/dhqqwdevm/image/upload/v1665777202/DEV/311061848_922318209155803_4539806402679458494_n_uqpque.jpg)
