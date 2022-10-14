@@ -25,12 +25,25 @@ char pass[] = "E6YDAka5";//Enter your WIFI password
 String tagUID = "F3 72 37 30";
 int counter = 3;
 int invalidRetries = 0;
+int rfidMode = 0; // SET initial rfid mode to true (IF TRUE THAT MEANS RFID MODE IS DISABLED)
+int doorOverride = 0;
 BLYNK_WRITE(V0) {
-  digitalWrite(LED_G, param.asInt());
+  rfidMode = param.asInt();
+  sg90.write(0);
+}
+BLYNK_WRITE(V1) {
+  int value = param.asInt();
+  if(value==1){
+    openDoorSystem();
+    rfidMode=1;
+  }else{
+    closeDoorSystem();
+    rfidMode=2;
+  }
 }
 void setup() {
   
-	Serial.begin(9600);		// Initialize serial communications with the PC
+	Serial.begin(115200);		// Initialize serial communications with the PC
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   delay(100);
@@ -59,7 +72,7 @@ void loop() {
     Blynk.run();
     WiFiClient client;
     HTTPClient http;
-    lcd.setCursor(0, 0);
+   lcd.setCursor(0, 0);
     lcd.print("   Door Lock");
     lcd.setCursor(0, 1);
     lcd.print(" Scan Your Tag ");
@@ -72,8 +85,22 @@ void loop() {
 	if ( ! mfrc522.PICC_ReadCardSerial()) {
 		return;
 	}
-
-	String tag = "";
+  if(rfidMode){
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("  Owner has");
+    lcd.setCursor(0, 1);
+    lcd.print("denied access");
+    digitalWrite(LED_R, HIGH);
+    tone(BUZZER, 300);
+    
+    delay(2000);
+    digitalWrite(LED_R, LOW);
+    noTone(BUZZER);
+    lcd.clear();
+  }else {
+     
+    String tag = "";
     for (byte j = 0; j < mfrc522.uid.size; j++)
     {
       tag.concat(String(mfrc522.uid.uidByte[j] < 0x10 ? " 0" : " "));
@@ -85,9 +112,10 @@ void loop() {
     if (tag.substring(1) == tagUID)
     {
       // If UID of tag is matched.
+      invalidRetries=0;
       lcd.clear();
       lcd.setCursor(0, 0);
-      lcd.print("Access Granted");
+      lcd.print("  Access Granted");
       digitalWrite(LED_G, HIGH);
       lcd.setCursor(0, 1);
       lcd.print("Unlocking Door");
@@ -107,9 +135,9 @@ void loop() {
       invalidRetries++;
       lcd.clear();
       lcd.setCursor(0, 0);
-      lcd.print("Access denied");
+      lcd.print("  Access denied");
       lcd.setCursor(0, 1);
-      lcd.print(String(counter) + " attempts left");
+      lcd.print(String(counter) + " attempt/s left");
       digitalWrite(LED_R, HIGH);
       tone(BUZZER, 300);
       delay(2000);
@@ -119,6 +147,7 @@ void loop() {
       Serial.print(counter);
       if(counter==0){
         counter =3;
+        
       }
       if(invalidRetries==3){
         http.begin(client,"http://maker.ifttt.com/trigger/entry/json/with/key/mcdd7ioVhfAmj0_Hp6fQSQ04Y9HXAfyiuqitVysx0Xw");
@@ -127,5 +156,20 @@ void loop() {
         invalidRetries=0;
       }
    }
+  }
+	
    
+}
+void openDoorSystem(){
+   
+   sg90.write(160);
+   digitalWrite(LED_G, HIGH);
+   delay(2000);
+    
+    
+}
+void closeDoorSystem(){
+   sg90.write(0);
+   digitalWrite(LED_G, LOW);
+   delay(2000);
 }
