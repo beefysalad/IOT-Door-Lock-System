@@ -1,6 +1,6 @@
 # IOT Door Lock System
-Subject requirement for the subject CPE461 - Embedded Systems. 
-### Members
+is a simple IoT Door Lock system that can be integrated to homes. The device will use RFID tags in order to unlock the door, or manually open the door thru the Blynk App.  
+### Developers
 - [John Patrick Ryan Mandal](https://github.com/beefysalad)
 - [Paolo Taboso](https://github.com/tabsgage)
 
