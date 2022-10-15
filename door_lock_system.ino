@@ -38,7 +38,7 @@ BLYNK_WRITE(V1) {
     rfidMode=1;
   }else{
     closeDoorSystem();
-    rfidMode=2;
+    rfidMode=0;
   }
 }
 void setup() {
