@@ -25,7 +25,7 @@ char pass[] = "E6YDAka5";//Enter your WIFI password
 String tagUID = "F3 72 37 30";
 int counter = 3;
 int invalidRetries = 0;
-int rfidMode = 0; // SET initial rfid mode to true (IF TRUE THAT MEANS RFID MODE IS DISABLED)
+int rfidMode = 0; // SET initial disabled rfid mode to false (IF TRUE THAT MEANS RFID MODE IS DISABLED)
 int doorOverride = 0;
 BLYNK_WRITE(V0) {
   rfidMode = param.asInt();
@@ -113,6 +113,7 @@ void loop() {
     {
       // If UID of tag is matched.
       invalidRetries=0;
+      counter=3;
       lcd.clear();
       lcd.setCursor(0, 0);
       lcd.print("  Access Granted");
@@ -164,7 +165,9 @@ void openDoorSystem(){
    
    sg90.write(160);
    digitalWrite(LED_G, HIGH);
+    tone(BUZZER, 200);
    delay(2000);
+   noTone(BUZZER);
     
     
 }
