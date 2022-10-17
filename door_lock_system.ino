@@ -44,11 +44,11 @@ BLYNK_WRITE(V1) {
 void setup() {
   
 	Serial.begin(115200);		// Initialize serial communications with the PC
-  WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
+  WiFi.mode(WIFI_STA); //station mode: the ESP8266 connects to an access point
+  WiFi.disconnect(); // will disconnect first before attmepting to connect
   delay(100);
-  WiFi.begin(ssid,pass);
-  while(WiFi.status()!=WL_CONNECTED){
+  WiFi.begin(ssid,pass); //connect 
+  while(WiFi.status()!=WL_CONNECTED){ //check if connected
     delay(500);
   }
   Serial.println("");
@@ -63,16 +63,16 @@ void setup() {
   sg90.attach(SERVO);
   sg90.write(0);
 	SPI.begin();			
-	mfrc522.PCD_Init();		
-  Blynk.begin(auth, ssid, pass, "blynk.cloud", 80);
+	mfrc522.PCD_Init();		// initialize rfid 
+  Blynk.begin(auth, ssid, pass, "blynk.cloud", 80); //Connection of the blynk app to the network (WiFi, Ethernet, ...)
 	lcd.clear();
 }
 
 void loop() {
-    Blynk.run();
-    WiFiClient client;
-    HTTPClient http;
-   lcd.setCursor(0, 0);
+    Blynk.run(); //establishes and keeps the connection between our blynk app, this will enable the transferring of data and receiving
+    WiFiClient client; //initializes a new instance of a wifi client
+    HTTPClient http; //initializes a new intstance of an http client
+    lcd.setCursor(0, 0);
     lcd.print("   Door Lock");
     lcd.setCursor(0, 1);
     lcd.print(" Scan Your Tag ");
@@ -152,8 +152,8 @@ void loop() {
       }
       if(invalidRetries==3){
         http.begin(client,"http://maker.ifttt.com/trigger/entry/json/with/key/mcdd7ioVhfAmj0_Hp6fQSQ04Y9HXAfyiuqitVysx0Xw");
-        http.GET();
-        http.end();
+        http.GET(); //iyang e execute ang said http request which is in this case kay GET request
+        http.end(); //this will close the connection and free up all resources
         invalidRetries=0;
       }
    }
