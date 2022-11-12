@@ -20,8 +20,8 @@ LiquidCrystal_I2C lcd(0x27, 16, 2);
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 Servo sg90;
 char auth[] = BLYNK_AUTH_TOKEN;
-char ssid[] = "ZTE_2.4G_xqiREP";//Enter your WIFI name
-char pass[] = "E6YDAka5";//Enter your WIFI password
+char ssid[] = "SSID";//Enter your WIFI name
+char pass[] = "PASSWORD";//Enter your WIFI password
 String tagUID = "F3 72 37 30";
 int counter = 3;
 int invalidRetries = 0;
